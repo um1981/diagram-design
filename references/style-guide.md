@@ -192,6 +192,22 @@ Consequences:
 
 Sarabun covers Thai, Latin and Vietnamese only. For Korean, Chinese or Cyrillic labels append the matching Noto family after Sarabun on that `<text>` (`'Sarabun', 'Noto Sans KR', sans-serif`), add it to the font link, and apply the same 12px floor and register switch as Thai.
 
+### Font source
+
+The font source decides whether a diagram makes any network request. It is a skin setting, so a saved profile carries it too.
+
+Font source: `system` (Windows default: Segoe UI Variable / Leelawadee UI) / `web` (Google Fonts: Sarabun, Geist)
+
+| Value | What ships | Network |
+|---|---|---|
+| `web` | The Google Fonts `<link>`; text renders in Sarabun, Geist, and Geist Mono | One stylesheet request to `fonts.googleapis.com`, plus the font files |
+| `system` (default) | Windows standard fonts ("Segoe UI Variable" & "Leelawadee UI") with no font `<link>` | None (offline-safe) |
+
+Use `system` when the user asks for offline output, system fonts, or no Google Fonts. In `system` mode:
+- Omit the font `<link>` (and export `@import`) entirely. Keep every `font-family` stack with system fallbacks.
+- Fallback faces have different metrics, so verify Thai measurements with `scripts/measure_text.py`.
+- Export with `python3 scripts/export_svg.py <file> --system-fonts`, and verify with `python3 scripts/self_check.py --offline <file>`, which confirms no remote Google Fonts request.
+
 ---
 
 ## Stroke, radius, spacing
